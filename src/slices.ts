@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MemoryModalType } from './utils/types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { MemoryModalType } from './utils/types'
+import { initMemoryType } from './constants'
 
 interface OpenModalState {
   value: boolean;
@@ -13,13 +14,9 @@ const initialOpenModalState: OpenModalState = {
   value: false,
 };
 
+
 const initialMemoryModalState: MemoryModalState = {
-  memoryModalData: {
-    name: '',
-    description: '',
-    timestamp: '',
-    image: null,
-  },
+  memoryModalData: initMemoryType
 };
 
 const openModalSlice = createSlice({

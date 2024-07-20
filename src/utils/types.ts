@@ -11,4 +11,5 @@ export interface MemoryModalType {
     description: string;
     timestamp: string;
     image: File | null;
+    imagename?: string
 }
