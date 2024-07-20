@@ -11,19 +11,10 @@ import {
   FormControl
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-const CustomButton = styled(Button)({
-  backgroundColor: 'white',
-  border: '1px solid #D1D5DB',
-  color: '#4B5563',
-  padding: '8px 16px',
-  borderRadius: '0.375rem',
-  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-  textTransform: 'none',
-  '&:hover': {
-    backgroundColor: '#F9FAFB',
-  }
-});
+import { MemoryModalType } from '../utils/types';
+import { useSelector, useDispatch } from 'react-redux';
+import { setOpenModal } from '../slices';
+import { RootState } from '../store';
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   margin: theme.spacing(2, 0),
@@ -54,44 +45,50 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   },
 }));
 
-const MemoryModal: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    timestamp: '',
-    image: null
-  });
+interface MemoryModalProps {
+  memory?: MemoryModalType;
+  modalSubmitHandler: (memory: MemoryModalType) => void
+}
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler }) => {
+  const openModal = useSelector((state: RootState) => state.openModal.value);
+  const dispatch = useDispatch();
 
+  const initialFormData = memory
+    ? { ...memory }
+    : {
+        name: '',
+        description: '',
+        timestamp: '',
+        image: null
+      };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  
   const handleClose = () => {
-    setOpen(false);
+    dispatch(setOpenModal(false));
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, files } = event.target;
     setFormData(prevData => ({
       ...prevData,
-      [name]: type === 'file' ? files ? files[0] : null : value
+      [name]: type === 'file' ? (files ? files[0] : null) : value
     }));
   };
 
+  
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formData); // Handle form submission
+    modalSubmitHandler(formData);
     handleClose();
   };
 
   return (
     <div>
-      <CustomButton variant="contained" color="primary" onClick={handleClickOpen}>
-        + New Memory
-      </CustomButton>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create Memory</DialogTitle>
+      <Dialog open={openModal} onClose={handleClose}>
+        <DialogTitle>{memory ? 'Update Memory' : 'Create Memory'}</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit}>
             <StyledTextField
@@ -101,8 +98,8 @@ const MemoryModal: React.FC = () => {
               type="text"
               fullWidth
               variant="outlined"
-              name="title"
-              value={formData.title}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
             />
             <StyledTextField
@@ -141,7 +138,7 @@ const MemoryModal: React.FC = () => {
                 Cancel
               </Button>
               <Button type="submit" color="primary">
-                Submit
+                {memory ? 'Update' : 'Submit'}
               </Button>
             </DialogActions>
           </form>
@@ -152,4 +149,5 @@ const MemoryModal: React.FC = () => {
 };
 
 export default MemoryModal;
+
 

@@ -1,12 +1,19 @@
 import express from 'express'
 import pkg from 'sqlite3'
+import multer from 'multer'
 const { Database } = pkg
+import cors from 'cors'
 
 const app = express()
+const upload = multer();
 const port = 4001
 const db = new Database('memories.db')
 
 app.use(express.json())
+app.use(cors({
+  origin: '*'
+}))
+
 
 db.serialize(() => {
   db.run(`
@@ -14,10 +21,12 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       description TEXT,
-      timestamp DATE
+      timestamp DATE,
+      image BLOB,
+      imagename TEXT
     )
-  `)
-})
+  `);
+});
 
 app.get('/memories', (req, res) => {
   db.all('SELECT * FROM memories', (err, rows) => {
@@ -29,20 +38,22 @@ app.get('/memories', (req, res) => {
   })
 })
 
-app.post('/memories', (req, res) => {
+app.post('/memories', upload.single('image'), (req, res) => {
   const { name, description, timestamp } = req.body
+  const image = req.file?.buffer;
+  const imageName = req.file?.originalname
 
-  if (!name || !description || !timestamp) {
+  if (!name || !description || !timestamp || !image) {
     res.status(400).json({
-      error: 'Please provide all fields: name, description, timestamp',
+      error: 'Please provide all fields: name, description, timestamp, image',
     })
     return
   }
 
   const stmt = db.prepare(
-    'INSERT INTO memories (name, description, timestamp) VALUES (?, ?, ?)'
+    'INSERT INTO memories (name, description, timestamp, image, imagename) VALUES (?, ?, ?, ?, ?)'
   )
-  stmt.run(name, description, timestamp, (err) => {
+  stmt.run(name, description, timestamp, image, imageName, (err) => {
     if (err) {
       res.status(500).json({ error: err.message })
       return
@@ -69,8 +80,10 @@ app.get('/memories/:id', (req, res) => {
 app.put('/memories/:id', (req, res) => {
   const { id } = req.params
   const { name, description, timestamp } = req.body
+  const image = req.file?.buffer;
+  const imageName = req.file?.originalname
 
-  if (!name || !description || !timestamp) {
+  if (!name || !description || !timestamp || !image) {
     res.status(400).json({
       error: 'Please provide all fields: name, description, timestamp',
     })
@@ -78,9 +91,9 @@ app.put('/memories/:id', (req, res) => {
   }
 
   const stmt = db.prepare(
-    'UPDATE memories SET name = ?, description = ?, timestamp = ? WHERE id = ?'
+    'UPDATE memories SET name = ?, description = ?, timestamp = ?, image = ?, imagename = ? WHERE id = ?'
   )
-  stmt.run(name, description, timestamp, id, (err) => {
+  stmt.run(name, description, timestamp, image, imageName, id, (err) => {
     if (err) {
       res.status(500).json({ error: err.message })
       return
