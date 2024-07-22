@@ -41,6 +41,7 @@ app.get('/memories', (req, res) => {
 app.post('/memories', upload.single('image'), (req, res) => {
   const { name, description, timestamp } = req.body
   const image = req.file?.buffer;
+  
   const imageName = req.file?.originalname
 
   if (!name || !description || !timestamp || !image) {
@@ -49,7 +50,7 @@ app.post('/memories', upload.single('image'), (req, res) => {
     })
     return
   }
-
+  
   const stmt = db.prepare(
     'INSERT INTO memories (name, description, timestamp, image, imagename) VALUES (?, ?, ?, ?, ?)'
   )
@@ -73,34 +74,47 @@ app.get('/memories/:id', (req, res) => {
       res.status(404).json({ error: 'Memory not found' })
       return
     }
+    console.log(row)
+    const image64 = row.image.toString('base64')
+    row.image = image64
     res.json({ memory: row })
   })
 })
 
-app.put('/memories/:id', (req, res) => {
-  const { id } = req.params
-  const { name, description, timestamp } = req.body
+app.put('/memories/:id', upload.single('image'), (req, res) => {
+  const { id } = req.params;
+  const { name, description, timestamp } = req.body;
   const image = req.file?.buffer;
-  const imageName = req.file?.originalname
+  const imageName = req.file?.originalname;
 
-  if (!name || !description || !timestamp || !image) {
+  if (!name || !description || !timestamp) {
     res.status(400).json({
       error: 'Please provide all fields: name, description, timestamp',
-    })
-    return
+    });
+    return;
   }
 
-  const stmt = db.prepare(
-    'UPDATE memories SET name = ?, description = ?, timestamp = ?, image = ?, imagename = ? WHERE id = ?'
-  )
-  stmt.run(name, description, timestamp, image, imageName, id, (err) => {
+  let query = 'UPDATE memories SET name = ?, description = ?, timestamp = ?';
+  const params = [name, description, timestamp];
+
+  if (image) {
+    query += ', image = ?, imagename = ?';
+    params.push(image, imageName);
+  }
+
+  query += ' WHERE id = ?';
+  params.push(id);
+
+  const stmt = db.prepare(query);
+  stmt.run(params, (err) => {
     if (err) {
-      res.status(500).json({ error: err.message })
-      return
+      res.status(500).json({ error: err.message });
+      return;
     }
-    res.json({ message: 'Memory updated successfully' })
-  })
-})
+    res.json({ message: 'Memory updated successfully' });
+  });
+});
+
 
 app.delete('/memories/:id', (req, res) => {
   const { id } = req.params

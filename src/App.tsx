@@ -1,10 +1,9 @@
 // import { CubeIcon } from '@heroicons/react/20/solid'
 import './App.css'
 import { useState, useEffect } from 'react'
-import MemoryModal  from './components/MemoryModal'
 import MemoryButton from './components/MemoryButton'
 import MemoryCard from './components/MemoryCard'
-import { postMemory, getMemory } from './utils/service'
+import { getMemory } from './utils/service'
 import { MemoryModalType } from './utils/types'
 import { initMemoryType } from './constants'
 
@@ -28,14 +27,8 @@ function App() {
         <div className='overflow-hidden rounded-lg bg-white shadow h-96'>
           <div className='px-4 py-5 sm:p-6'>
             <div className="flex justify-between items-center mb-4">
-              <div>
                 <MemoryButton/>
-                <MemoryModal modalSubmitHandler={postMemory}/>
-              </div>
-              <div>
                 <MemoryButton/>
-                <MemoryModal modalSubmitHandler={postMemory}/>
-              </div>
             </div>
             <MemoryCard memory={memory}/>
             <div className='flex items-center'>

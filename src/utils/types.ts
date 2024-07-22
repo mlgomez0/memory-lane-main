@@ -7,9 +7,10 @@ export interface MemoryType {
 }
 
 export interface MemoryModalType {
-    name: string;
-    description: string;
-    timestamp: string;
-    image: File | null;
+    id?:string
+    name: string
+    description: string
+    timestamp: string
+    image: File | null
     imagename?: string
 }

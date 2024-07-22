@@ -1,8 +1,10 @@
-import React from 'react';
-import { Button } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
-import { setOpenModal } from '../slices';
+import React from 'react'
+import { Button } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { useDispatch } from 'react-redux'
+import { setOpenModal } from '../slices'
+import MemoryModal  from './MemoryModal'
+import { postMemory } from '../utils/service'
 
 const CustomButton = styled(Button)({
   backgroundColor: 'white',
@@ -21,7 +23,7 @@ const CustomButton = styled(Button)({
 
 const MemoryButton: React.FC = () => {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const handleClickOpen = () => {
     dispatch(setOpenModal(true))
@@ -31,6 +33,7 @@ const MemoryButton: React.FC = () => {
       <CustomButton variant="contained" color="primary" onClick={ handleClickOpen }>
         + New Memory
       </CustomButton>
+      <MemoryModal modalSubmitHandler={postMemory}/>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -6,15 +6,15 @@ import {
   DialogActions,
   TextField,
   Button,
-  InputLabel,
   Input,
-  FormControl
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { MemoryModalType } from '../utils/types';
-import { useSelector, useDispatch } from 'react-redux';
-import { setOpenModal } from '../slices';
-import { RootState } from '../store';
+  FormControl,
+  FormHelperText
+} from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { MemoryModalType } from '../utils/types'
+import { useSelector, useDispatch } from 'react-redux'
+import { setOpenModal } from '../slices'
+import { RootState } from '../store'
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   margin: theme.spacing(2, 0),
@@ -43,7 +43,11 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
     border: `1px solid ${theme.palette.grey[300]}`,
     backgroundColor: theme.palette.background.paper,
   },
-}));
+}))
+
+const StyledFormHelperText = styled(FormHelperText)(({ theme }) => ({
+  color: theme.palette.error.main,
+}))
 
 interface MemoryModalProps {
   memory?: MemoryModalType;
@@ -51,38 +55,78 @@ interface MemoryModalProps {
 }
 
 const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler }) => {
+  const [error, setError] = useState<{ [key: string]: string | null }>({});
   const openModal = useSelector((state: RootState) => state.openModal.value);
   const dispatch = useDispatch();
+  const initialData = {
+    name: '',
+    description: '',
+    timestamp: '',
+    image: null
+  }
 
   const initialFormData = memory
     ? { ...memory }
-    : {
-        name: '',
-        description: '',
-        timestamp: '',
-        image: null
-      };
+    : initialData
 
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData)
 
-  
   const handleClose = () => {
-    dispatch(setOpenModal(false));
+    setError({});
+    setFormData(initialData)
+    dispatch(setOpenModal(false))
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, files } = event.target;
     setFormData(prevData => ({
       ...prevData,
-      [name]: type === 'file' ? (files ? files[0] : null) : value
-    }));
+      [name]: type === 'file' ? (files ? validateFileFormat(files[0]) : null) : value
+    }))
+  }
+
+  const validateFileFormat = (file: File | null) => {
+    if (!file || !file.type.startsWith('image/')) {
+      setError(prevError => ({ ...prevError, image: 'Error: Please upload a valid image file.' }))
+      return null
+    }
+    setError(prevError => ({ ...prevError, image: null }));
+    return file;
   };
 
-  
+  const validateForm = () => {
+    let isValid = true;
+    let newErrors: { [key: string]: string | null } = {}
+
+    if (!formData.name) {
+      newErrors.name = 'Title is required'
+      isValid = false
+    }
+    if (!formData.description) {
+      newErrors.description = 'Description is required'
+      isValid = false
+    }
+    if (!formData.timestamp) {
+      newErrors.timestamp = 'Date is required'
+      isValid = false
+    }
+    if (!formData.image) {
+      newErrors.image = 'Image is required'
+      isValid = false
+    }
+
+    setError(newErrors)
+    return isValid
+  };
+
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    modalSubmitHandler(formData);
-    handleClose();
+    event.preventDefault()
+
+    if (validateForm()) {
+      modalSubmitHandler(formData)
+      handleClose()
+      setFormData(initialData)
+    }
   };
 
   return (
@@ -101,6 +145,8 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
               name="name"
               value={formData.name}
               onChange={handleChange}
+              error={!!error.name}
+              helperText={error.name}
             />
             <StyledTextField
               margin="dense"
@@ -113,6 +159,8 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
               name="description"
               value={formData.description}
               onChange={handleChange}
+              error={!!error.description}
+              helperText={error.description}
             />
             <StyledTextField
               margin="dense"
@@ -123,15 +171,17 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
               name="timestamp"
               value={formData.timestamp}
               onChange={handleChange}
+              error={!!error.timestamp}
+              helperText={error.timestamp}
             />
-            <StyledFormControl fullWidth margin="dense">
-              <InputLabel htmlFor="image-upload">Image</InputLabel>
+            <StyledFormControl fullWidth margin="dense" error={!!error.image}>
               <Input
                 id="image-upload"
                 type="file"
                 name="image"
                 onChange={handleChange}
               />
+              {error.image && <StyledFormHelperText>{error.image}</StyledFormHelperText>}
             </StyledFormControl>
             <DialogActions>
               <Button onClick={handleClose} color="primary">
@@ -148,6 +198,4 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
   );
 };
 
-export default MemoryModal;
-
-
+export default MemoryModal
