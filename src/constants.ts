@@ -5,4 +5,4 @@ export const initMemoryType: MemoryModalType = {
   description: '',
   timestamp: '',
   image: null,
-};
+}

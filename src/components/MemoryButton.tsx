@@ -17,7 +17,7 @@ const CustomButton = styled(Button)({
   '&:hover': {
     backgroundColor: '#F9FAFB',
   }
-});
+})
 
 
 
@@ -27,7 +27,7 @@ const MemoryButton: React.FC = () => {
 
   const handleClickOpen = () => {
     dispatch(setOpenModal(true))
-  };
+  }
   return (
     <div>
       <CustomButton variant="contained" color="primary" onClick={ handleClickOpen }>
@@ -35,7 +35,7 @@ const MemoryButton: React.FC = () => {
       </CustomButton>
       <MemoryModal modalSubmitHandler={postMemory}/>
     </div>
-  );
-};
+  )
+}
 
-export default MemoryButton;
+export default MemoryButton

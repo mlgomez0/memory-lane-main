@@ -1,22 +1,19 @@
 import React, { useState } from 'react'
 import { Card, CardContent, Typography, IconButton, Menu, MenuItem, Avatar, CardHeader } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { MemoryModalType } from '../utils/types'
+import { MemoryCardProps } from '../utils/types'
 import MemoryModal  from './MemoryModal'
-import { updateMemory } from '../utils/service'
+import { updateMemory, deleteMemory } from '../utils/service'
 import { useDispatch } from 'react-redux'
 import { setOpenModal } from '../slices'
+import AlertMemoryDeletion from './AlertMemoryDeletion'
 
-
-interface MemoryCardProps {
-    memory: MemoryModalType
-}
 
 const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
   const dispatch = useDispatch()
 	const { name, description, timestamp, image } = memory
-  
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [openDeleteAlert, setOpenDeleteAlert] = useState(false)
   
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -24,6 +21,10 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  };
+
+  const handleAlert = () => {
+    setOpenDeleteAlert(true)
   };
 
   const formatString = (dateString: string) => {
@@ -43,6 +44,10 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
   };
 
   const handleDelete = () => {
+    if (memory.id) {
+      deleteMemory(memory.id)
+    }
+    setOpenDeleteAlert(false)
     handleClose()
   };
     
@@ -50,7 +55,7 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
-        avatar={<Avatar alt="Cactus" src={`data:image/jpeg;base64,${image}`} />}
+        avatar={<Avatar sx={{ height: 80, width: 80 }} alt="Cactus" src={`data:image/jpeg;base64,${image}`} />}
         action={
           <IconButton aria-label="settings" onClick={handleClick}>
             <MoreVertIcon />
@@ -71,9 +76,10 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
       >
         <MenuItem onClick={handleUpdate}>Update</MenuItem>
         <MemoryModal modalSubmitHandler={updateMemory} memory={memory}/>
-        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem onClick={handleAlert}>Delete</MenuItem>
+        <AlertMemoryDeletion handleDelete={handleDelete} openDeleteAlert={openDeleteAlert} setOpenDeleteAlert={setOpenDeleteAlert}/>
       </Menu>
     </Card>
-  );
-};
+  )
+}
 export default MemoryCard

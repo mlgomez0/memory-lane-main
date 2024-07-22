@@ -15,6 +15,8 @@ import { MemoryModalType } from '../utils/types'
 import { useSelector, useDispatch } from 'react-redux'
 import { setOpenModal } from '../slices'
 import { RootState } from '../store'
+import { initMemoryType } from '../constants'
+import FileUpload from './UploadButton'
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   margin: theme.spacing(2, 0),
@@ -29,7 +31,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
     padding: '10px 14px',
   }
-}));
+}))
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   margin: theme.spacing(2, 0),
@@ -50,20 +52,15 @@ const StyledFormHelperText = styled(FormHelperText)(({ theme }) => ({
 }))
 
 interface MemoryModalProps {
-  memory?: MemoryModalType;
+  memory?: MemoryModalType
   modalSubmitHandler: (memory: MemoryModalType) => void
 }
 
 const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler }) => {
-  const [error, setError] = useState<{ [key: string]: string | null }>({});
-  const openModal = useSelector((state: RootState) => state.openModal.value);
-  const dispatch = useDispatch();
-  const initialData = {
-    name: '',
-    description: '',
-    timestamp: '',
-    image: null
-  }
+  const [error, setError] = useState<{ [key: string]: string | null }>({})
+  const openModal = useSelector((state: RootState) => state.openModal.value)
+  const dispatch = useDispatch()
+  const initialData = initMemoryType
 
   const initialFormData = memory
     ? { ...memory }
@@ -72,30 +69,36 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
   const [formData, setFormData] = useState(initialFormData)
 
   const handleClose = () => {
-    setError({});
-    setFormData(initialData)
+    setError({})
     dispatch(setOpenModal(false))
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, files } = event.target;
+    const { name, value, type, files } = event.target
+    const updatedValue = type === 'file' ? (files ? validateFileFormat(files[0]) : null) : value
+
     setFormData(prevData => ({
       ...prevData,
-      [name]: type === 'file' ? (files ? validateFileFormat(files[0]) : null) : value
-    }))
-  }
+      [name]: updatedValue
+    }));
+
+    setError(prevError => ({
+      ...prevError,
+      [name]: null
+    }));
+  };
 
   const validateFileFormat = (file: File | null) => {
     if (!file || !file.type.startsWith('image/')) {
       setError(prevError => ({ ...prevError, image: 'Error: Please upload a valid image file.' }))
       return null
     }
-    setError(prevError => ({ ...prevError, image: null }));
-    return file;
+    setError(prevError => ({ ...prevError, image: null }))
+    return file
   };
 
   const validateForm = () => {
-    let isValid = true;
+    let isValid = true
     let newErrors: { [key: string]: string | null } = {}
 
     if (!formData.name) {
@@ -165,7 +168,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
             <StyledTextField
               margin="dense"
               label="Date"
-              type="datetime-local"
+              type="date"
               fullWidth
               variant="outlined"
               name="timestamp"
@@ -175,12 +178,13 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
               helperText={error.timestamp}
             />
             <StyledFormControl fullWidth margin="dense" error={!!error.image}>
-              <Input
+              {/* <Input
                 id="image-upload"
                 type="file"
                 name="image"
                 onChange={handleChange}
-              />
+              /> */}
+              <FileUpload handleChange={handleChange}/>
               {error.image && <StyledFormHelperText>{error.image}</StyledFormHelperText>}
             </StyledFormControl>
             <DialogActions>
@@ -195,7 +199,8 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
 export default MemoryModal
+

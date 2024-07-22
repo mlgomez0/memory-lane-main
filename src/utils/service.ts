@@ -58,11 +58,37 @@ export const updateMemory = async (memory: MemoryModalType) => {
 };
 
 export const getMemory = async (id: string): Promise<MemoryModalType> => {
-  try {  
-    const response = await axios.get(apiEndpoint + '/' + id)
+  try {
+    const getEndpoint = `${apiEndpoint}/${id}`
+    const response = await axios.get(getEndpoint)
 
     console.log('Response:', response.data)
     return response.data.memory
+  } catch (error) {
+    console.error('Error:', error)
+    throw error
+  }
+}
+
+export const getMemories = async (): Promise<MemoryModalType[]> => {
+  try {
+    const response = await axios.get(apiEndpoint)
+
+    console.log('Response Get Memories:', response.data)
+    return response.data.memories
+  } catch (error) {
+    console.error('Error:', error)
+    throw error
+  }
+}
+
+export const deleteMemory = async (id: string): Promise<MemoryModalType> => {
+  try {
+    const deleteEndpoint = `${apiEndpoint}/${id}`
+    const response = await axios.delete(deleteEndpoint)
+
+    console.log('Response:', response.data)
+    return response.data
   } catch (error) {
     console.error('Error:', error)
     throw error

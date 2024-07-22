@@ -1,9 +1,9 @@
 export interface MemoryType {
-    id: number;
-    name: string;
-    description: string;
-    timestamp: string;
-    image: Blob;
+    id: number
+    name: string
+    description: string
+    timestamp: string
+    image: Blob
 }
 
 export interface MemoryModalType {
@@ -13,4 +13,8 @@ export interface MemoryModalType {
     timestamp: string
     image: File | null
     imagename?: string
+}
+
+export interface MemoryCardProps {
+    memory: MemoryModalType
 }
