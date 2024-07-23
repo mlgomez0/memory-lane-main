@@ -6,8 +6,6 @@ import {
   DialogActions,
   TextField,
   Button,
-  Input,
-  FormControl,
   FormHelperText
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
@@ -16,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setOpenModal } from '../slices'
 import { RootState } from '../store'
 import { initMemoryType } from '../constants'
-import FileUpload from './UploadButton'
+import FileUpload from './FileUpload'
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   margin: theme.spacing(2, 0),
@@ -33,20 +31,6 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   }
 }))
 
-const StyledFormControl = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(2, 0),
-  '& .MuiInputLabel-root': {
-    fontSize: '0.875rem',
-    color: theme.palette.text.primary,
-  },
-  '& .MuiInput-root': {
-    padding: theme.spacing(1),
-    borderRadius: theme.shape.borderRadius,
-    border: `1px solid ${theme.palette.grey[300]}`,
-    backgroundColor: theme.palette.background.paper,
-  },
-}))
-
 const StyledFormHelperText = styled(FormHelperText)(({ theme }) => ({
   color: theme.palette.error.main,
 }))
@@ -56,7 +40,13 @@ interface MemoryModalProps {
   modalSubmitHandler: (memory: MemoryModalType) => void
 }
 
+const generateFileMessage = (filename:string) => {
+  return `File ${filename} uploaded!`
+}
+
 const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler }) => {
+  const uploadFileIntruction = "Drag & drop an image here, or click to select one"
+  const [uploadMessage, setUploadMessage] = useState(memory?.imagename ? generateFileMessage(memory.imagename) : uploadFileIntruction)
   const [error, setError] = useState<{ [key: string]: string | null }>({})
   const openModal = useSelector((state: RootState) => state.openModal.value)
   const dispatch = useDispatch()
@@ -69,22 +59,35 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
   const [formData, setFormData] = useState(initialFormData)
 
   const handleClose = () => {
+    if (!memory) {
+      setUploadMessage(uploadFileIntruction)
+      setFormData(initialFormData)
+    }
     setError({})
     dispatch(setOpenModal(false))
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, files } = event.target
-    const updatedValue = type === 'file' ? (files ? validateFileFormat(files[0]) : null) : value
-
+    const { name, value } = event.target
+  
     setFormData(prevData => ({
       ...prevData,
-      [name]: updatedValue
+      [name]: value
     }))
 
     setError(prevError => ({
       ...prevError,
       [name]: null
+    }))
+  }
+
+  const handleFileUpload = (uploadedFile: File) => {
+    const updatedValue = validateFileFormat(uploadedFile)
+    const message = updatedValue ? generateFileMessage(updatedValue?.name) : uploadFileIntruction
+    setUploadMessage(message)
+    setFormData(prevData => ({
+      ...prevData,
+      ['image']: updatedValue
     }))
   }
 
@@ -177,16 +180,8 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
               error={!!error.timestamp}
               helperText={error.timestamp}
             />
-            <StyledFormControl fullWidth margin="dense" error={!!error.image}>
-              <Input
-                id="image-upload"
-                type="file"
-                name="image"
-                onChange={handleChange}
-              />
-              {/* <FileUpload handleChange={handleChange}/> */}
-              {error.image && <StyledFormHelperText>{error.image}</StyledFormHelperText>}
-            </StyledFormControl>
+            <FileUpload handleFileUpload={handleFileUpload} uploadMessage={uploadMessage}/>
+            {error.image && <StyledFormHelperText>{error.image}</StyledFormHelperText>}
             <DialogActions>
               <Button onClick={handleClose} color="primary">
                 Cancel
