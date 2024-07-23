@@ -7,6 +7,9 @@ import SelectSort from './components/SortSelector'
 import { useSelector, useDispatch } from 'react-redux'
 import { setMemories } from './slices'
 import { RootState } from './store'
+import { CubeIcon } from '@heroicons/react/20/solid'
+import ShareButton from './components/ShareButton'
+
 
 
 function App() {
@@ -25,13 +28,20 @@ function App() {
   return (
     <div>
       <div className='mx-auto max-w-7xl sm:px-6 lg:px-8 mt-32'>
-        <div className='flex items-center mt-4'>
-          <h1 className='text-4xl font-semibold text-gray-900 mb-4 ml-4'>
-            Memory lane
-          </h1>
-        </div>
         <div className='overflow-hidden rounded-lg bg-white shadow height 50rem'>
           <div className='px-4 py-5 sm:p-6 h-full flex flex-col'>
+            <div className='flex justify-between items-center'>
+              <div className='flex items-center mt-4'>
+                <CubeIcon className='h-16 w-16 inline-block' />
+                <h1 className='text-4xl font-semibold text-gray-900 mb-4 ml-4'>
+                  Memory lane
+                </h1>
+              </div>
+              <ShareButton/>
+            </div>
+            <div className="mt-5 mb-5 border border-gray-300 px-4 py-2 rounded-md shadow-sm min-h-[90px]">
+              <p>this is the about section</p>
+            </div>
             <div className="flex justify-between items-center mb-4">
                 <SelectSort/>
                 <MemoryButton/>

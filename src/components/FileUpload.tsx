@@ -15,12 +15,13 @@ const DropzoneContainer = styled('div')({
   },
 });
 
-const CustomButton = styled(Button)({
+const CustomButton = styled(Button)<{ component?: React.ElementType }>({
   backgroundColor: '#007bff',
   color: 'white',
   borderRadius: '4px',
   padding: '10px 20px',
   fontSize: '16px',
+  marginTop: '20px',
   textAlign: 'center',
   cursor: 'pointer',
   transition: 'background-color 0.3s ease',
@@ -35,23 +36,24 @@ const CustomButton = styled(Button)({
 interface FileUploadProps {
   handleFileUpload: (file: File) => void
   uploadMessage: string
+  buttonMessage: string
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ handleFileUpload, uploadMessage }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ handleFileUpload, uploadMessage, buttonMessage }) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       handleFileUpload(acceptedFiles[0])
     }
   }, [handleFileUpload])
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' })
+  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: { 'image/*': [] } });
 
   return (
     <DropzoneContainer {...getRootProps()}>
       <input {...getInputProps()} />
       <p>{uploadMessage}</p>
       <CustomButton variant="contained" component="span">
-        Upload Image
+        {buttonMessage}
       </CustomButton>
     </DropzoneContainer>
   )

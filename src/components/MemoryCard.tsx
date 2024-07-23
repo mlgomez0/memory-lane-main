@@ -17,33 +17,33 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
   
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
-  };
+  }
 
   const handleClose = () => {
     setAnchorEl(null)
-  };
+  }
 
   const handleAlert = () => {
     setOpenDeleteAlert(true)
-  };
+  }
 
   const formatString = (dateString: string) => {
     const [year, month, day] = dateString.split('-').map(Number)
     
-    const date = new Date(year, month - 1, day);
+    const date = new Date(year, month - 1, day)
   
     const formatter = new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'long',
       day: '2-digit'
-    });
+    })
   
-    return formatter.format(date);
+    return formatter.format(date)
   }
 
   const handleUpdate = () => {
     dispatch(setOpenModal(true))
-  };
+  }
 
   const handleDelete = () => {
     if (memory.id) {
@@ -51,11 +51,11 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
     }
     setOpenDeleteAlert(false)
     handleClose()
-  };
+  }
     
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, width:345}}>
       <CardHeader
         avatar={<Avatar sx={{ height: 80, width: 80 }} alt="Cactus" src={`data:image/jpeg;base64,${image}`} />}
         action={

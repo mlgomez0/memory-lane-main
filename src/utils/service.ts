@@ -15,8 +15,6 @@ const prepareFormData = (memory: MemoryModalType) => {
     formData.append('image', memory.image, memory.image.name)
   }
 
-  console.log("FormData: ", formData)
-
   return formData
 }
 
@@ -41,7 +39,6 @@ export const updateMemory = async (memory: MemoryModalType) => {
   try {
     const formData = prepareFormData(memory)
     const putEndpoint = `${apiEndpoint}/${memory.id}`
-    console.log("Memory", memory)
 
     const response = await axios.put(putEndpoint, formData, {
       headers: {
@@ -74,7 +71,7 @@ export const getMemories = async (): Promise<MemoryModalType[]> => {
   try {
     const response = await axios.get(apiEndpoint)
 
-    console.log('Response Get Memories:', response.data)
+    console.log('Response:', response.data)
     return response.data.memories
   } catch (error) {
     console.error('Error:', error)

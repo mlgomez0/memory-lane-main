@@ -16,6 +16,7 @@ import { RootState } from '../store'
 import { initMemoryType } from '../constants'
 import FileUpload from './FileUpload'
 
+
 const StyledTextField = styled(TextField)(({ theme }) => ({
   margin: theme.spacing(2, 0),
   '& .MuiInputLabel-root': {
@@ -46,6 +47,7 @@ const generateFileMessage = (filename:string) => {
 
 const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler }) => {
   const uploadFileIntruction = "Drag & drop an image here, or click to select one"
+  const fileUploadButtonMessage = memory ? "Update Image": "Upload Image"
   const [uploadMessage, setUploadMessage] = useState(memory?.imagename ? generateFileMessage(memory.imagename) : uploadFileIntruction)
   const [error, setError] = useState<{ [key: string]: string | null }>({})
   const openModal = useSelector((state: RootState) => state.openModal.value)
@@ -180,7 +182,10 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
               error={!!error.timestamp}
               helperText={error.timestamp}
             />
-            <FileUpload handleFileUpload={handleFileUpload} uploadMessage={uploadMessage}/>
+            <FileUpload
+              handleFileUpload={handleFileUpload}
+              uploadMessage={uploadMessage}
+              buttonMessage={fileUploadButtonMessage}/>
             {error.image && <StyledFormHelperText>{error.image}</StyledFormHelperText>}
             <DialogActions>
               <Button onClick={handleClose} color="primary">
