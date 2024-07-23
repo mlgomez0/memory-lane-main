@@ -71,7 +71,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
   const handleClose = () => {
     setError({})
     dispatch(setOpenModal(false))
-  };
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, files } = event.target
@@ -80,13 +80,13 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
     setFormData(prevData => ({
       ...prevData,
       [name]: updatedValue
-    }));
+    }))
 
     setError(prevError => ({
       ...prevError,
       [name]: null
-    }));
-  };
+    }))
+  }
 
   const validateFileFormat = (file: File | null) => {
     if (!file || !file.type.startsWith('image/')) {
@@ -95,7 +95,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
     }
     setError(prevError => ({ ...prevError, image: null }))
     return file
-  };
+  }
 
   const validateForm = () => {
     let isValid = true
@@ -120,7 +120,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
 
     setError(newErrors)
     return isValid
-  };
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
@@ -130,7 +130,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
       handleClose()
       setFormData(initialData)
     }
-  };
+  }
 
   return (
     <div>
@@ -178,13 +178,13 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
               helperText={error.timestamp}
             />
             <StyledFormControl fullWidth margin="dense" error={!!error.image}>
-              {/* <Input
+              <Input
                 id="image-upload"
                 type="file"
                 name="image"
                 onChange={handleChange}
-              /> */}
-              <FileUpload handleChange={handleChange}/>
+              />
+              {/* <FileUpload handleChange={handleChange}/> */}
               {error.image && <StyledFormHelperText>{error.image}</StyledFormHelperText>}
             </StyledFormControl>
             <DialogActions>

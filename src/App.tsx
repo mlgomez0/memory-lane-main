@@ -1,17 +1,22 @@
 import './App.css'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import MemoryButton from './components/MemoryButton'
 import { getMemories } from './utils/service'
-import { MemoryModalType } from './utils/types'
 import MemoryCarousel from './components/MemoryCarousel'
+import SelectSort from './components/SortSelector'
+import { useSelector, useDispatch } from 'react-redux'
+import { setMemories } from './slices'
+import { RootState } from './store'
+
 
 function App() {
-  const [memories, setMemories] = useState<MemoryModalType[]>([])
+  const memories = useSelector((state: RootState) => state.memories.memories)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchMemories = async () => {
       const fetchedMemories = await getMemories()
-      setMemories(fetchedMemories)
+      dispatch(setMemories(fetchedMemories))
     }
 
     fetchMemories()
@@ -28,7 +33,7 @@ function App() {
         <div className='overflow-hidden rounded-lg bg-white shadow height 50rem'>
           <div className='px-4 py-5 sm:p-6 h-full flex flex-col'>
             <div className="flex justify-between items-center mb-4">
-                <MemoryButton/>
+                <SelectSort/>
                 <MemoryButton/>
             </div>
             <MemoryCarousel memories={memories}/>

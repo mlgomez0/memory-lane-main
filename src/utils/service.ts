@@ -28,14 +28,14 @@ export const postMemory = async (memory: MemoryModalType) => {
       headers: {
          'Content-Type': 'multipart/form-data'
       }
-    });
+    })
     console.log('Response:', response.data)
     return response.data
   } catch (error) {
     console.error('Error:', error)
     throw error
   }
-};
+}
 
 export const updateMemory = async (memory: MemoryModalType) => {
   try {
@@ -47,7 +47,7 @@ export const updateMemory = async (memory: MemoryModalType) => {
       headers: {
          'Content-Type': 'multipart/form-data'
       }
-    });
+    })
 
     console.log('Response:', response.data)
     return response.data
@@ -55,7 +55,7 @@ export const updateMemory = async (memory: MemoryModalType) => {
     console.error('Error:', error)
     throw error
   }
-};
+}
 
 export const getMemory = async (id: string): Promise<MemoryModalType> => {
   try {

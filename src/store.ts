@@ -4,7 +4,7 @@ import reducers from './slices'
 const store = configureStore({
   reducer: {
     openModal: reducers.openModal,
-    memoryModalData: reducers.memoryModalData
+    memories: reducers.memories
   },
 })
 

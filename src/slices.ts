@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { MemoryModalType } from './utils/types'
-import { initMemoryType } from './constants'
 
 interface OpenModalState {
   value: boolean
 }
 
-interface MemoryModalState {
-  memoryModalData: MemoryModalType
+interface MemoriesState {
+  memories: MemoryModalType[]
 }
 
 const initialOpenModalState: OpenModalState = {
@@ -15,8 +14,9 @@ const initialOpenModalState: OpenModalState = {
 }
 
 
-const initialMemoryModalState: MemoryModalState = {
-  memoryModalData: initMemoryType
+
+const initialMemoriesState: MemoriesState = {
+  memories: []
 }
 
 const openModalSlice = createSlice({
@@ -29,19 +29,19 @@ const openModalSlice = createSlice({
   },
 })
 
-const memoryModalSlice = createSlice({
-  name: 'memoryModalData',
-  initialState: initialMemoryModalState,
+const memoriesSlice = createSlice({
+  name: 'memories',
+  initialState: initialMemoriesState,
   reducers: {
-    setMemoryModalData: (state, action: PayloadAction<MemoryModalState['memoryModalData']>) => {
-      state.memoryModalData = action.payload
+    setMemories: (state, action: PayloadAction<MemoriesState['memories']>) => {
+      state.memories = action.payload
     },
   },
 })
 
 export const { setOpenModal } = openModalSlice.actions
-export const { setMemoryModalData } = memoryModalSlice.actions
+export const { setMemories } = memoriesSlice.actions
 export default {
   openModal: openModalSlice.reducer,
-  memoryModalData: memoryModalSlice.reducer,
+  memories: memoriesSlice.reducer,
 }
