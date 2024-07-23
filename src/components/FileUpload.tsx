@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { styled } from '@mui/material/styles';
-import { Button } from '@mui/material';
+import React, { useCallback } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { styled } from '@mui/material/styles'
+import { Button } from '@mui/material'
 
 const DropzoneContainer = styled('div')({
   border: '2px dashed #007bff',
@@ -40,11 +40,11 @@ interface FileUploadProps {
 const FileUpload: React.FC<FileUploadProps> = ({ handleFileUpload, uploadMessage }) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
-      handleFileUpload(acceptedFiles[0]);
+      handleFileUpload(acceptedFiles[0])
     }
-  }, [handleFileUpload]);
+  }, [handleFileUpload])
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' })
 
   return (
     <DropzoneContainer {...getRootProps()}>
@@ -54,7 +54,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleFileUpload, uploadMessage
         Upload Image
       </CustomButton>
     </DropzoneContainer>
-  );
-};
+  )
+}
 
-export default FileUpload;
+export default FileUpload
