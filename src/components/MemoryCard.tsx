@@ -1,12 +1,21 @@
 import React, { useState } from 'react'
-import { Card, CardContent, Typography, IconButton, Menu, MenuItem, Avatar, CardHeader } from '@mui/material'
+import {
+    Card,
+    CardContent,
+    Typography,
+    IconButton,
+    Menu,
+    MenuItem,
+    Avatar,
+    CardHeader
+} from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { MemoryCardProps } from '../utils/types'
 import MemoryModal  from './MemoryModal'
-import { updateMemory, deleteMemory } from '../utils/service'
 import { useDispatch } from 'react-redux'
 import { setOpenModal } from '../slices'
 import AlertMemoryDeletion from './AlertMemoryDeletion'
+import { useMemories } from '../hooks/useMemories'
 
 
 const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
@@ -14,6 +23,7 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
 	const { name, description, timestamp, image } = memory
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false)
+  const { removeMemory } = useMemories()
   
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -45,9 +55,13 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
     dispatch(setOpenModal(true))
   }
 
+  const handleDeleteMemory = async (id: string) => {
+    await removeMemory(id)
+  }
+
   const handleDelete = () => {
     if (memory.id) {
-      deleteMemory(memory.id)
+      handleDeleteMemory(memory.id)
     }
     setOpenDeleteAlert(false)
     handleClose()
@@ -77,7 +91,7 @@ const MemoryCard: React.FC<MemoryCardProps> = ({ memory }) => {
         onClose={handleClose}
       >
         <MenuItem onClick={handleUpdate}>Update</MenuItem>
-        <MemoryModal modalSubmitHandler={updateMemory} memory={memory}/>
+        <MemoryModal memory={memory}/>
         <MenuItem onClick={handleAlert}>Delete</MenuItem>
         <AlertMemoryDeletion handleDelete={handleDelete} openDeleteAlert={openDeleteAlert} setOpenDeleteAlert={setOpenDeleteAlert}/>
       </Menu>

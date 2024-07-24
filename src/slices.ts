@@ -13,8 +13,6 @@ const initialOpenModalState: OpenModalState = {
   value: false,
 }
 
-
-
 const initialMemoriesState: MemoriesState = {
   memories: []
 }
@@ -39,8 +37,10 @@ const memoriesSlice = createSlice({
   },
 })
 
+
 export const { setOpenModal } = openModalSlice.actions
 export const { setMemories } = memoriesSlice.actions
+
 export default {
   openModal: openModalSlice.reducer,
   memories: memoriesSlice.reducer,

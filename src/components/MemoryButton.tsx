@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles'
 import { useDispatch } from 'react-redux'
 import { setOpenModal } from '../slices'
 import MemoryModal  from './MemoryModal'
-import { postMemory } from '../utils/service'
 import { sharedStyles } from '../utils/sharedStyles'
 
 const CustomButton = styled(Button)({
@@ -23,7 +22,7 @@ const MemoryButton: React.FC = () => {
       <CustomButton variant="contained" color="primary" onClick={ handleClickOpen }>
         + New Memory
       </CustomButton>
-      <MemoryModal modalSubmitHandler={postMemory}/>
+      <MemoryModal/>
     </div>
   )
 }

@@ -15,6 +15,7 @@ import { setOpenModal } from '../slices'
 import { RootState } from '../store'
 import { initMemoryType } from '../constants'
 import FileUpload from './FileUpload'
+import { useMemories } from '../hooks/useMemories'
 
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -38,18 +39,18 @@ const StyledFormHelperText = styled(FormHelperText)(({ theme }) => ({
 
 interface MemoryModalProps {
   memory?: MemoryModalType
-  modalSubmitHandler: (memory: MemoryModalType) => void
 }
 
 const generateFileMessage = (filename:string) => {
   return `File ${filename} uploaded!`
 }
 
-const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler }) => {
+const MemoryModal: React.FC<MemoryModalProps> = ({ memory }) => {
   const uploadFileIntruction = "Drag & drop an image here, or click to select one"
   const fileUploadButtonMessage = memory ? "Update Image": "Upload Image"
   const [uploadMessage, setUploadMessage] = useState(memory?.imagename ? generateFileMessage(memory.imagename) : uploadFileIntruction)
   const [error, setError] = useState<{ [key: string]: string | null }>({})
+  const { addMemory, editMemory } = useMemories()
   const openModal = useSelector((state: RootState) => state.openModal.value)
   const dispatch = useDispatch()
   const initialData = initMemoryType
@@ -127,11 +128,23 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory, modalSubmitHandler })
     return isValid
   }
 
+  const handleAddMemory = async (memory: MemoryModalType) => {
+    await addMemory(memory)
+  }
+
+  const handleEditMemory = async (memory: MemoryModalType) => {
+    await editMemory(memory)
+  }
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
 
     if (validateForm()) {
-      modalSubmitHandler(formData)
+      if (memory) {
+        handleEditMemory(formData)
+      } else {
+        handleAddMemory(formData)
+      }
       handleClose()
       setFormData(initialData)
     }

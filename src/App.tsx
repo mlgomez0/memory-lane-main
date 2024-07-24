@@ -1,25 +1,22 @@
 import './App.css'
 import { useEffect } from 'react'
 import MemoryButton from './components/MemoryButton'
-import { getMemories } from './utils/service'
 import MemoryCarousel from './components/MemoryCarousel'
 import SelectSort from './components/SortSelector'
-import { useSelector, useDispatch } from 'react-redux'
-import { setMemories } from './slices'
+import { useSelector } from 'react-redux'
 import { RootState } from './store'
 import { CubeIcon } from '@heroicons/react/20/solid'
 import ShareButton from './components/ShareButton'
-
+import { useMemories } from './hooks/useMemories'
 
 
 function App() {
   const memories = useSelector((state: RootState) => state.memories.memories)
-  const dispatch = useDispatch()
+  const { refreshMemories } = useMemories()
 
   useEffect(() => {
     const fetchMemories = async () => {
-      const fetchedMemories = await getMemories()
-      dispatch(setMemories(fetchedMemories))
+      await refreshMemories()
     }
 
     fetchMemories()
@@ -34,13 +31,17 @@ function App() {
               <div className='flex items-center mt-4'>
                 <CubeIcon className='h-16 w-16 inline-block' />
                 <h1 className='text-4xl font-semibold text-gray-900 mb-4 ml-4'>
-                  Memory lane
+                  Mary's memory lane
                 </h1>
               </div>
               <ShareButton/>
             </div>
             <div className="mt-5 mb-5 border border-gray-300 px-4 py-2 rounded-md shadow-sm min-h-[90px]">
-              <p>this is the about section</p>
+              <p>I am lucky; I have traveled worldwide,
+                met wonderful people, and tasted incredible food!
+                I want to keep all those memories as part of who I am.
+                This memory lane helps me remember and live those moments again.
+              </p>
             </div>
             <div className="flex justify-between items-center mb-4">
                 <SelectSort/>
