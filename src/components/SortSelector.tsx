@@ -1,5 +1,4 @@
 import {useState} from 'react'
-import { styled } from '@mui/material/styles'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
@@ -7,20 +6,7 @@ import { setMemories } from '../slices'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../store'
 import { MemoryModalType } from '../utils/types'
-import { sharedStyles } from '../utils/sharedStyles'
 
-const CustomFormControl = styled(FormControl)({
-  ...sharedStyles
-})
-
-const CustomSelect = styled(Select)(({ theme }) => ({
-  '& .MuiSelect-select': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(1, 2),
-  }
-}))
 
 const sortMemoriesByTimestamp = (memories: MemoryModalType[], ascending: boolean): MemoryModalType[] => {
   return [...memories].sort((a, b) => {
@@ -45,8 +31,8 @@ const SelectSort = () => {
   }
 
   return (
-    <CustomFormControl size="small">
-        <CustomSelect
+    <FormControl size="small">
+        <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
         value={selected}
@@ -54,8 +40,8 @@ const SelectSort = () => {
       >
         <MenuItem value='10'>Older to new</MenuItem>
         <MenuItem value='20'>New to older</MenuItem>
-      </CustomSelect>
-    </CustomFormControl>
+      </Select>
+    </FormControl>
   )
 }
 

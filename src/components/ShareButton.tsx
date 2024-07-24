@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled } from '@mui/material/styles'
+import styled from '@emotion/styled';
 import IconButton from '@mui/material/IconButton'
 import ShareIcon from '@mui/icons-material/Share'
 import Tooltip from '@mui/material/Tooltip'

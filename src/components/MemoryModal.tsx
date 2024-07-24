@@ -6,9 +6,10 @@ import {
   DialogActions,
   TextField,
   Button,
-  FormHelperText
+  FormHelperText,
+  Typography,
 } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import styled from '@emotion/styled'
 import { MemoryModalType } from '../utils/types'
 import { useSelector, useDispatch } from 'react-redux'
 import { setOpenModal } from '../slices'
@@ -18,8 +19,8 @@ import FileUpload from './FileUpload'
 import { useMemories } from '../hooks/useMemories'
 
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
-  margin: theme.spacing(2, 0),
+const StyledTextField = styled(TextField)({
+  margin: '16px 0',
   '& .MuiInputLabel-root': {
     top: '-6px',
     left: '14px',
@@ -30,12 +31,12 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
   '& .MuiOutlinedInput-root': {
     padding: '10px 14px',
-  }
-}))
+  },
+})
 
-const StyledFormHelperText = styled(FormHelperText)(({ theme }) => ({
-  color: theme.palette.error.main,
-}))
+const StyledFormHelperText = styled(FormHelperText)({
+  color: '#f44336'
+})
 
 interface MemoryModalProps {
   memory?: MemoryModalType
@@ -111,6 +112,11 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory }) => {
       newErrors.name = 'Title is required'
       isValid = false
     }
+
+    if (formData.name.length >= 100) {
+      newErrors.name = 'Title is too long'
+      isValid = false
+    }
     if (!formData.description) {
       newErrors.description = 'Description is required'
       isValid = false
@@ -168,7 +174,11 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory }) => {
               onChange={handleChange}
               error={!!error.name}
               helperText={error.name}
+              inputProps={{ maxLength: 100 }}
             />
+            <Typography variant="caption" color={formData.name.length === 100 ? 'error' : 'textSecondary'}>
+              {formData.name.length}/100 characters
+            </Typography>
             <StyledTextField
               margin="dense"
               label="Description"
@@ -216,4 +226,6 @@ const MemoryModal: React.FC<MemoryModalProps> = ({ memory }) => {
 }
 
 export default MemoryModal
+
+
 

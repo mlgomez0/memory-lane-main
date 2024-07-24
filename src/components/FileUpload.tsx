@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { styled } from '@mui/material/styles'
+import styled from '@emotion/styled'
 import { Button } from '@mui/material'
 
 const DropzoneContainer = styled('div')({
