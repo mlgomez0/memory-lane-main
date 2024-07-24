@@ -4,7 +4,6 @@ import { MemoryModalType } from './types'
 const apiEndpoint = 'http://localhost:4001/memories'
 
 const prepareFormData = (memory: MemoryModalType) => {
-
   const formData = new FormData()
 
   formData.append('name', memory.name)
@@ -24,8 +23,8 @@ export const postMemory = async (memory: MemoryModalType) => {
 
     const response = await axios.post(apiEndpoint, formData, {
       headers: {
-         'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     })
 
     return response.data
@@ -42,8 +41,8 @@ export const updateMemory = async (memory: MemoryModalType) => {
 
     const response = await axios.put(putEndpoint, formData, {
       headers: {
-         'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     })
 
     return response.data
@@ -57,7 +56,6 @@ export const getMemory = async (id: string): Promise<MemoryModalType> => {
   try {
     const getEndpoint = `${apiEndpoint}/${id}`
     const response = await axios.get(getEndpoint)
-
 
     return response.data.memory
   } catch (error) {

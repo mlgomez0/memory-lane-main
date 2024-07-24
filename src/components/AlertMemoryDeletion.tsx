@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction} from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -7,13 +7,16 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
 interface AlertDialogProps {
-    handleDelete: () => void
-    openDeleteAlert: boolean
-    setOpenDeleteAlert: Dispatch<SetStateAction<boolean>>
-  }
+  handleDelete: () => void
+  openDeleteAlert: boolean
+  setOpenDeleteAlert: Dispatch<SetStateAction<boolean>>
+}
 
-  const AlertMemoryDeletion: React.FC<AlertDialogProps> = ({ handleDelete, openDeleteAlert, setOpenDeleteAlert }) => {
-  
+const AlertMemoryDeletion: React.FC<AlertDialogProps> = ({
+  handleDelete,
+  openDeleteAlert,
+  setOpenDeleteAlert,
+}) => {
   const handleClose = () => {
     setOpenDeleteAlert(false)
   }
@@ -23,14 +26,14 @@ interface AlertDialogProps {
       <Dialog
         open={openDeleteAlert}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you going to delete this memory?"}
+        <DialogTitle id='alert-dialog-title'>
+          {'Are you going to delete this memory?'}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id='alert-dialog-description'>
             This action will eliminate the memory from our records.
           </DialogContentText>
         </DialogContent>

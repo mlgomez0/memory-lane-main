@@ -14,7 +14,7 @@ const initialOpenModalState: OpenModalState = {
 }
 
 const initialMemoriesState: MemoriesState = {
-  memories: []
+  memories: [],
 }
 
 const openModalSlice = createSlice({
@@ -36,7 +36,6 @@ const memoriesSlice = createSlice({
     },
   },
 })
-
 
 export const { setOpenModal } = openModalSlice.actions
 export const { setMemories } = memoriesSlice.actions

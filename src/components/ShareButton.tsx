@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import ShareIcon from '@mui/icons-material/Share'
 import Tooltip from '@mui/material/Tooltip'
@@ -16,21 +16,26 @@ const CustomIconButton = styled(IconButton)({
   },
 })
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-})
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
+  function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
+  },
+)
 
 const ShareButton = () => {
   const [open, setOpen] = React.useState(false)
 
   const handleClick = () => {
-    const url = window.location.href;
+    const url = window.location.href
     navigator.clipboard.writeText(url).then(() => {
       setOpen(true)
-    });
+    })
   }
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (
+    _event: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
     if (reason === 'clickaway') {
       return
     }
@@ -39,7 +44,7 @@ const ShareButton = () => {
 
   return (
     <div>
-      <Tooltip title="Copy link">
+      <Tooltip title='Copy link'>
         <CustomIconButton onClick={handleClick}>
           <ShareIcon />
         </CustomIconButton>
@@ -50,7 +55,7 @@ const ShareButton = () => {
         autoHideDuration={3000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="success">
+        <Alert onClose={handleClose} severity='success'>
           Link copied to clipboard!
         </Alert>
       </Snackbar>

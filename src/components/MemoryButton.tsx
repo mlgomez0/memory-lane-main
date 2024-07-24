@@ -1,16 +1,15 @@
 import React from 'react'
 import { Button } from '@mui/material'
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 import { useDispatch } from 'react-redux'
 import { setOpenModal } from '../slices'
-import MemoryModal  from './MemoryModal'
-
+import MemoryModal from './MemoryModal'
 
 const CustomButton = styled(Button)({
   backgroundColor: 'white',
   border: '1px solid #D1D5DB',
   fontFamily: 'Arial',
-  height:'40px',
+  height: '40px',
   fontSize: 'medium',
   color: '#4B5563',
   borderRadius: '0.375rem',
@@ -18,11 +17,10 @@ const CustomButton = styled(Button)({
   textTransform: 'none',
   '&:hover': {
     backgroundColor: 'white',
-  }
+  },
 })
 
 const MemoryButton: React.FC = () => {
-
   const dispatch = useDispatch()
 
   const handleClickOpen = () => {
@@ -30,10 +28,14 @@ const MemoryButton: React.FC = () => {
   }
   return (
     <div>
-      <CustomButton variant="contained" color="primary" onClick={ handleClickOpen }>
+      <CustomButton
+        variant='contained'
+        color='primary'
+        onClick={handleClickOpen}
+      >
         + New Memory
       </CustomButton>
-      <MemoryModal/>
+      <MemoryModal />
     </div>
   )
 }

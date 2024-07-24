@@ -1,6 +1,11 @@
 import { useDispatch } from 'react-redux'
 import { setMemories } from '../slices'
-import { postMemory, updateMemory, deleteMemory, getMemories } from '../utils/service'
+import {
+  postMemory,
+  updateMemory,
+  deleteMemory,
+  getMemories,
+} from '../utils/service'
 import { MemoryModalType } from '../utils/types'
 
 export const useMemories = () => {
