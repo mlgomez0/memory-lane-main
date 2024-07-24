@@ -94,9 +94,8 @@ function App() {
     const fetchMemories = async () => {
       await refreshMemories()
     }
-
     fetchMemories()
-  }, [refreshMemories])
+  }, [])
 
   return (
     <Container>
