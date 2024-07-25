@@ -1,7 +1,5 @@
 # Mary's Memory Lane
 
-# Project Title
-
 ## Technical Decisions
 
 - **MUI (Material UI)**: I used MUI for the components because it offers a rich set of components, which I have used in the past and find effective.
