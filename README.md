@@ -69,6 +69,8 @@
 
 If you experience the following error while running in dev mode:
 
+![App](public/images/bug-issue.png)
+
 1. Remove the `node_modules` folder and reinstall dependencies.
 2. Alternatively, compile and review the application using the `vite preview` command.
 
